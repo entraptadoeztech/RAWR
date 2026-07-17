@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADWS Movie Selection</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#0a0a0a,#1a1a2e);
+    color:#fff;
+    min-height:100vh;
+    padding:20px;
+}
+
+.header{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.header h1{
+    font-size:3em;
+    color:#00d4ff;
+    text-shadow:0 0 20px #00d4ff;
+}
+
+.search-container{
+    max-width:600px;
+    margin:0 auto 20px;
+}
+
+#searchBar{
+    width:100%;
+    padding:15px;
+    border-radius:50px;
+    border:2px solid #00d4ff;
+    background:rgba(0,212,255,.1);
+    color:#fff;
+    font-size:18px;
+    outline:none;
+}
+
+.movie-count{
+    text-align:center;
+    margin-bottom:15px;
+    color:#00d4ff;
+}
+
+.movies-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+    gap:20px;
+    max-width:1400px;
+    margin:0 auto;
+}
+
+.movie-card{
+    background:rgba(0,212,255,.1);
+    border:1px solid rgba(0,212,255,.3);
+    border-radius:15px;
+    padding:20px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.movie-card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 10px 30px rgba(0,212,255,.4);
+}
+
+.movie-title{
+    color:#00d4ff;
+    font-weight:bold;
+    margin-bottom:5px;
+}
+
+.movie-quality,.movie-year{
+    font-size:12px;
+    opacity:.7;
+}
+
+/* PLAYER VIEW */
+#playerView{
+    display:none;
+    max-width:1200px;
+    margin:0 auto;
+}
+
+#backBtn{
+    background:#00d4ff;
+    color:#000;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-bottom:15px;
+    font-size:16px;
+}
+
+iframe{
+    width:100%;
+    height:70vh;
+    border-radius:12px;
+    border:2px solid #00d4ff;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>ADWS Movie Selection</h1>
+</div>
+
+<div id="listView">
+    <div class="search-container">
+        <input id="searchBar" placeholder="Search movies..." onkeyup="searchMovies()">
+    </div>
+
+    <div class="movie-count" id="movieCount"></div>
+    <div class="movies-container" id="moviesContainer"></div>
+</div>
+
+<div id="playerView">
+    <button id="backBtn" onclick="goBack()">⬅ Back to Movies</button>
+    <iframe id="movieFrame" allowfullscreen></iframe>
+</div>
+
+<script>
+const moviesBasePath = ""; 
+// Example if hosted: "https://yourdomain.com/movies/"
+
+const movies = [
+    {title:"Five Nights At Freddys 2",quality:"720p HD",year:"2025",file:"Five Nights At Freddys 2 720p HD 2025.avi"},
+    {title:"A Goofy Movie",quality:"720p BluRay",year:"1995",file:"A.Goofy.Movie.1995.720p.BluRay.x264-[YTS.AM].mp4"},
+    {title:"John Wick",quality:"Full Movie",year:"",file:"John Wick Full.mp4"},
+    {title:"Halloween",quality:"720p",year:"",file:"Halloween.720p.mp4"},
+    {title:"Shrek",quality:"Full Movie",year:"",file:"Shrek full movie full movie.mp4"}
+    // 🔥 Keep adding the rest of your movies here
+];
+
+let filteredMovies=[...movies];
+
+function displayMovies(list){
+    const c=document.getElementById("moviesContainer");
+    document.getElementById("movieCount").textContent=
+        `Showing ${list.length} of ${movies.length} movies`;
+
+    c.innerHTML=list.map(m=>`
+        <div class="movie-card" onclick="playMovie('${encodeURIComponent(m.file)}')">
+            <div class="movie-title">${m.title}</div>
+            <div class="movie-quality">${m.quality}</div>
+            <div class="movie-year">${m.year}</div>
+        </div>
+    `).join("");
+}
+
+function searchMovies(){
+    const s=document.getElementById("searchBar").value.toLowerCase();
+    filteredMovies=movies.filter(m=>
+        m.title.toLowerCase().includes(s)||
+        m.quality.toLowerCase().includes(s)||
+        m.year.toLowerCase().includes(s)
+    );
+    displayMovies(filteredMovies);
+}
+
+function playMovie(file){
+    document.getElementById("listView").style.display="none";
+    document.getElementById("playerView").style.display="block";
+    document.getElementById("movieFrame").src=moviesBasePath+file;
+}
+
+function goBack(){
+    document.getElementById("movieFrame").src="";
+    document.getElementById("playerView").style.display="none";
+    document.getElementById("listView").style.display="block";
+}
+
+displayMovies(movies);
+</script>
+
+</body>
+</html>

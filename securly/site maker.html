@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>site gen i guess idk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --purple-900: #1a0033;
+            --purple-800: #2d0052;
+            --purple-700: #4a0080;
+            --purple-600: #6b21a8;
+            --purple-500: #8b5cf6;
+            --purple-400: #a78bfa;
+            --purple-300: #c4b5fd;
+            --purple-200: #e9d5ff;
+            --black: #000000;
+            --white: #ffffff;
+            --gold: #fbbf24;
+            --danger: #ef4444;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+
+        .background-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #000000 0%, #0a0015 50%, #000000 100%);
+            z-index: 0;
+        }
+        #snow-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none; opacity: 0.6;
+        }
+
+       /* layout */
+        .container {
+            position: relative; z-index: 10;
+            max-width: 1000px; margin: 0 auto; padding: 2rem;
+            animation: fadeIn 1s ease-out;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .header { text-align: center; margin-bottom: 3rem; }
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif; font-size: 3rem; font-weight: 700;
+            background: linear-gradient(135deg, var(--white), var(--purple-300));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.3);
+        }
+
+        /* --- Editor Section --- */
+        .editor-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;
+        }
+        
+        .input-panel, .list-panel, .output-panel {
+            background: rgba(20, 10, 30, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            display: flex; flex-direction: column; gap: 1.5rem;
+        }
+
+        .output-panel {
+            grid-column: 1 / -1; display: none; margin-top: 2rem; border-color: var(--gold);
+        }
+
+        h2 { font-family: 'Space Grotesk', sans-serif; color: var(--purple-200); margin-bottom: 0.5rem; }
+
+        .form-group label { display: block; color: var(--purple-300); margin-bottom: 0.5rem; font-size: 0.9rem; }
+        
+        input, textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            font-family: 'Inter', monospace;
+            font-size: 0.9rem;
+            outline: none; transition: 0.3s;
+        }
+        input:focus, textarea:focus { border-color: var(--purple-500); box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2); }
+        textarea { height: 200px; resize: vertical; white-space: pre; overflow-x: auto; }
+
+        .btn {
+            padding: 0.8rem 1.5rem; border-radius: 0.75rem; border: none;
+            font-family: 'Space Grotesk', sans-serif; font-weight: 600; cursor: pointer;
+            transition: all 0.3s ease; width: 100%;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-700));
+            color: white; border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+        
+        .btn-generate {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #fbbf24, #d97706);
+            color: black; font-size: 1.2rem; margin-top: 1rem;
+        }
+        .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(251, 191, 36, 0.4); }
+
+        .btn-copy { background: var(--purple-500); color: white; width: auto; font-size: 0.9rem; }
+
+        .page-list { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 1rem; }
+        .page-item {
+            background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 1rem; border-radius: 0.75rem; display: flex; justify-content: space-between; align-items: center;
+        }
+        .page-info { display: flex; flex-direction: column; gap: 0.2rem; }
+        .page-cat { font-size: 0.75rem; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+        .page-item-title { font-weight: 600; color: var(--purple-100); }
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2); color: var(--danger);
+            padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.8rem; width: auto;
+        }
+        .btn-delete:hover { background: var(--danger); color: white; }
+
+        @media (max-width: 768px) { .editor-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="background-gradient"></div>
+    <canvas id="snow-canvas"></canvas>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="page-title">generate sites</h1>
+            <p style="color: var(--purple-200); margin-top: 10px;">Generates your own fully static site!</p>
+        </header>
+
+        <main class="editor-grid">
+            <!-- Input Panel -->
+            <div class="input-panel">
+                <h2>Add New Page</h2>
+                <div class="form-group">
+                    <label>Category (e.g. Games, Info)</label>
+                    <input type="text" id="pCat" placeholder="General">
+                </div>
+                <div class="form-group">
+                    <label>Page Title</label>
+                    <input type="text" id="pTitle" placeholder="e.g. Basket Random">
+                </div>
+                <div class="form-group">
+                    <label>HTML Code (Paste full code here)</label>
+                    <textarea id="pCode" placeholder="<!DOCTYPE html><html>...</html>"></textarea>
+                </div>
+                <button class="btn btn-primary" onclick="addPage()">+ Add Page</button>
+            </div>
+
+         <!-- panels -->
+            <div class="list-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2>Your Pages</h2>
+                    <span id="pageCount" style="color:var(--purple-400); font-size:0.9rem;">0 pages</span>
+                </div>
+                <div class="page-list" id="pageList">
+                    <div style="text-align:center; color:rgba(255,255,255,0.3); padding: 2rem;">No pages added yet.</div>
+                </div>
+            </div>
+
+
+            <button class="btn btn-generate" onclick="generateSite()">⚡ Generate Code</button>
+
+ 
+            <div class="output-panel" id="outputPanel">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <h2 style="color: var(--gold);">Success! Copy your code:</h2>
+                    <button class="btn btn-copy" onclick="copyToClipboard()">📋 Copy Code</button>
+                </div>
+                <p style="color:#aaa; font-size:0.9rem;">Paste this code into a new <b>index.html</b> file.</p>
+                <textarea id="finalCode" readonly style="height: 300px; color: #a6e3a1; background: #111; font-family: monospace; white-space: pre;"></textarea>
+            </div>
+        </main>
+    </div>
+
+<script>
+
+    const canvas = document.getElementById('snow-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
+    function resize() { width = window.innerWidth; height = window.innerHeight; canvas.width = width; canvas.height = height; }
+    class Particle {
+        constructor() { this.reset(); }
+        reset() { this.x = Math.random() * width; this.y = Math.random() * -height; this.speed = Math.random() * 1 + 0.5; this.size = Math.random() * 2 + 0.5; this.opacity = Math.random() * 0.5 + 0.1; }
+        update() { this.y += this.speed; if (this.y > height) this.reset(); }
+        draw() { ctx.fillStyle = `rgba(220, 210, 255, ${this.opacity})`; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
+    }
+    function animate() { ctx.clearRect(0, 0, width, height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(animate); }
+    window.addEventListener('resize', resize); resize(); for(let i=0; i<80; i++) particles.push(new Particle()); animate();
+
+    // --- Generator Logic ---
+    let pages = [];
+
+    function addPage() {
+        const catInput = document.getElementById('pCat');
+        const titleInput = document.getElementById('pTitle');
+        const codeInput = document.getElementById('pCode');
+        
+        const cat = catInput.value.trim() || "General";
+        const title = titleInput.value.trim();
+        const code = codeInput.value;
+
+        if (!title) { alert("Please enter a Page Title."); return; }
+        if (!code) { alert("Please enter some HTML content."); return; }
+
+        pages.push({ id: Date.now(), cat, title, code });
+        
+        titleInput.value = "";
+        codeInput.value = "";
+        
+        renderList();
+    }
+
+    function removePage(id) {
+        pages = pages.filter(p => p.id !== id);
+        renderList();
+    }
+
+    function renderList() {
+        const list = document.getElementById('pageList');
+        document.getElementById('pageCount').innerText = `${pages.length} pages`;
+        
+        if (pages.length === 0) {
+            list.innerHTML = `<div style="text-align:center; color:rgba(255,255,255,0.3); padding: 2rem;">No pages added yet.</div>`;
+            return;
+        }
+
+        list.innerHTML = '';
+        pages.forEach(page => {
+            const div = document.createElement('div');
+            div.className = 'page-item';
+            div.innerHTML = `
+                <div class="page-info">
+                    <span class="page-cat">${page.cat}</span>
+                    <span class="page-item-title">${page.title}</span>
+                </div>
+                <button class="btn btn-delete" onclick="removePage(${page.id})">Delete</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function generateSite() {
+        if (pages.length === 0) { alert("Add at least one page!"); return; }
+
+        let jsonPages = JSON.stringify(pages, null, 2);
+        jsonPages = jsonPages.replace(/<\/script>/g, '<\\/script>');
+
+        const generatedHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Local Site</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* FIXED: Body is 100vh to ensure iframe can fill it */
+    body { display: flex; height: 100vh; font-family: 'Segoe UI', sans-serif; background: #0a0a0a; color: #e5e5e5; overflow: hidden; }
+    
+    .sidebar { 
+        width: 280px; background: #121212; border-right: 1px solid #333; 
+        display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; height: 100%;
+    }
+    .sidebar-header { padding: 1.5rem; border-bottom: 1px solid #333; color: #fff; font-weight: bold; font-size: 1.2rem; }
+    
+    .cat-group { border-bottom: 1px solid #222; }
+    .cat-title { padding: 1rem 1.5rem; color: #888; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .nav-btn {
+        width: 100%; background: transparent; color: #ccc; border: none; padding: 0.8rem 1.5rem;
+        text-align: left; cursor: pointer; font-size: 0.95rem; transition: 0.2s; border-left: 3px solid transparent;
+    }
+    .nav-btn:hover { background: #1a1a1a; color: white; }
+    .nav-btn.active { background: #1a1a1a; color: #8b5cf6; border-left-color: #8b5cf6; }
+    
+   
+    .content-frame { 
+        flex: 1; border: none; width: 100%; height: 100vh; background: #0a0a0a; display: block;
+    }
+    
+    @media(max-width: 700px) {
+        body { flex-direction: column; }
+        .sidebar { width: 100%; height: auto; max-height: 200px; border-bottom: 1px solid #333; }
+        /* On mobile, iframe takes remaining height */
+        .content-frame { height: calc(100vh - 200px); }
+    }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">My Site</div>
+</div>
+<iframe class="content-frame" id="mainFrame" sandbox="allow-scripts allow-same-origin allow-popups allow-forms"></iframe>
+
+<script>
+    const pages = ${jsonPages};
+
+    const categories = {};
+    pages.forEach(p => {
+        if(!categories[p.cat]) categories[p.cat] = [];
+        categories[p.cat].push(p);
+    });
+
+    function load(id) {
+        const page = pages.find(p => p.id == id);
+        if(page) {
+            const frame = document.getElementById('mainFrame');
+            const doc = frame.contentWindow.document;
+            doc.open();
+            doc.write(page.code);
+            doc.close();
+
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            const activeBtn = document.getElementById('btn-'+id);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+    }
+
+    function init() {
+        const sidebar = document.getElementById('sidebar');
+        
+        Object.keys(categories).forEach(cat => {
+            const group = document.createElement('div');
+            group.className = 'cat-group';
+            
+            const title = document.createElement('div');
+            title.className = 'cat-title';
+            title.innerText = cat;
+            group.appendChild(title);
+            
+            categories[cat].forEach(page => {
+                const btn = document.createElement('button');
+                btn.className = 'nav-btn';
+                btn.id = 'btn-' + page.id;
+                btn.innerText = page.title;
+                btn.onclick = () => load(page.id);
+                group.appendChild(btn);
+            });
+            
+            sidebar.appendChild(group);
+        });
+
+        if(pages.length > 0) load(pages[0].id);
+    }
+
+    init();
+<\/script>
+</body>
+</html>`;
+
+        const outputPanel = document.getElementById('outputPanel');
+        const finalCode = document.getElementById('finalCode');
+        finalCode.value = generatedHTML;
+        outputPanel.style.display = 'flex';
+        outputPanel.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyToClipboard() {
+        const copyText = document.getElementById("finalCode");
+        copyText.select();
+        document.execCommand("copy");
+        alert("Code copied to clipboard!");
+    }
+</script>
+</body>
+</html>
