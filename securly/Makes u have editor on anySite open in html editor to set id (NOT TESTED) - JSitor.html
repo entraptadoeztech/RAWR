@@ -1,0 +1,17 @@
+<!doctype html><html><head><style type="text/css"></style></head><body><script type="text/javascript">const { google } = require('googleapis');
+const drive = google.drive('v3');
+
+// Function to create a bookmark and set editor permissions  
+const createBookmarkAndSetPermission = async (documentId) => {
+  const bookmarkElement = document.createElement('a');
+  bookmarkElement.href = `https://docs.google.com/document/d/${documentId}`;
+  bookmarkElement.innerText = 'Access Google Document';
+  bookmarkElement.target = '_blank';
+  document.body.appendChild(bookmarkElement);
+
+  // Assuming you've already authenticated and have an access token  
+  const auth = new google.auth.OAuth2(YOUR_CLIENT_ID, YOUR_CLIENT_SECRET, YOUR_REDIRECT_URL);
+  auth.setCredentials({ refresh_token: YOUR_REFRESH_TOKEN });
+
+    // Set editor p
+</script></body><html>
