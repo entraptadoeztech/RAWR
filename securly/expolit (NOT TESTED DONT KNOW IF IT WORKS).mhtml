@@ -1,0 +1,93 @@
+From: <Saved by Blink>
+Snapshot-Content-Location: https://xlak.github.io/chaos/
+Subject: 
+Date: Fri, 9 May 2025 20:55:19 -0400
+MIME-Version: 1.0
+Content-Type: multipart/related;
+	type="text/html";
+	boundary="----MultipartBoundary--iz5H6lsTLfnY8j5Cp4H8UysGOX5A7TinxBqb1uPerq----"
+
+
+------MultipartBoundary--iz5H6lsTLfnY8j5Cp4H8UysGOX5A7TinxBqb1uPerq----
+Content-Type: text/html
+Content-ID: <frame-7865BDD2A91667C7DA930175FAFEAF58@mhtml.blink>
+Content-Transfer-Encoding: quoted-printable
+Content-Location: https://xlak.github.io/chaos/
+
+<html><head><meta http-equiv=3D"Content-Type" content=3D"text/html; charset=
+=3DUTF-8"><link rel=3D"stylesheet" type=3D"text/css" href=3D"cid:css-10e883=
+10-8382-4911-bebd-b863f0dd4861@mhtml.blink" />
+
+</head><body><div class=3D"main">
+  <h2>Chaos Exploit</h2>
+  <br>
+  <p>A full bypass method for Hapara Highlights and Hapara Filter</p>
+  <p><small>Also works on some other filters (Check github for list).</smal=
+l></p>
+  <details>
+    <summary>Disclaimer</summary>
+    <small>
+      <p>It is <b>your</b> decision to bypass school monitoring. I am not r=
+esponsible if you get in trouble for the misuse of technology if you're cau=
+ght using this.</p>
+      <p>This exploit does not bypass network-wide filters. You will still =
+need a proxy site or a VPN to unblock all websites on most school networks.=
+</p>
+      <p>It may be suspicious if your device shows up as offline on the tea=
+cher dashboard. Use the Alphabetic Exploit instead during class.</p>
+    </small>
+  </details>
+  <br><br>
+  <button id=3D"menu">Click here to begin!</button>
+</div>
+<div style=3D"display:none" class=3D"menu">
+  <h2>Choose an Entrypoint</h2>
+  <p><small>Try the Point Blank entrypoint first.</small></p>
+  <br>
+  <div class=3D"center_button">
+    <button id=3D"pointblank">Run with Point Blank entrypoint</button>
+    <br><br>
+    <button id=3D"inspect">Run with Inspect entrypoint</button>
+  </div>
+</div>
+<div style=3D"display: none" class=3D"other">
+    <ul>
+      <li>A script has been copied to your clipboard. Paste it into the URL=
+ bar.</li>
+      <li>Right click on the page that loads and select "Inspect".</li>
+      <li>Click on "Console" at the top and paste the script in.</li>
+      <li>When an inspect window pops up, paste the script in again.</li>
+    </ul>
+</div>
+<div style=3D"display: none" class=3D"other2">
+    <ul>
+      <li>Drag the button below into your bookmarks bar.</li>
+      <li>Click the puzzle piece beside the URL bar and go to "Manage Exten=
+sions".</li>
+      <li>Click "Details" on any extension that you installed yourself.</li=
+>
+      <li>Click on "View in Chrome Web Store" and then spam Escape.</li>
+      <li>If the page stays blank, click on the bookmark.</li>
+    </ul>
+  <br><br>
+  <div class=3D"center_button">
+    <a>Chaos</a>
+  </div>
+</div>
+
+</body></html>
+------MultipartBoundary--iz5H6lsTLfnY8j5Cp4H8UysGOX5A7TinxBqb1uPerq----
+Content-Type: text/css
+Content-Transfer-Encoding: quoted-printable
+Content-Location: cid:css-10e88310-8382-4911-bebd-b863f0dd4861@mhtml.blink
+
+@charset "utf-8";
+
+body { align-items: center; justify-content: center; display: flex; user-se=
+lect: none; font-family: sans-serif; background: black; color: white; }
+
+.main, .menu, .center_button { text-align: center; }
+
+a, button { border: 2px solid white; color: white; background: black; font-=
+size: larger; border-radius: 40px; padding: 12px; }
+------MultipartBoundary--iz5H6lsTLfnY8j5Cp4H8UysGOX5A7TinxBqb1uPerq------
